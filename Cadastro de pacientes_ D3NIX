@@ -1,0 +1,107 @@
+package com.mycompany.cadastrodepacientes;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class CadastroDePacientes extends JFrame {
+    // Componentes
+    private JTextField nomeField, idadeField;
+    private JComboBox<String> generoBox;
+    private JTextArea sintomasArea;
+    private JButton salvarButton, limparButton, sairButton;
+
+    public CadastroDePacientes() {
+        setTitle("Cadastro de Pacientes - Hospital Vida");
+        setSize(400, 500);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        // Painel principal
+        JPanel painel = new JPanel();
+        painel.setBackground(new Color(230, 245, 250)); // azul hospitalar claro
+        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
+        painel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+
+        // Título
+        JLabel titulo = new JLabel("🩺 Cadastro de Pacientes");
+        titulo.setFont(new Font("SansSerif", Font.BOLD, 20));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        painel.add(titulo);
+        painel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        // Nome
+        painel.add(new JLabel("Nome:"));
+        nomeField = new JTextField();
+        painel.add(nomeField);
+
+        // Idade
+        painel.add(new JLabel("Idade:"));
+        idadeField = new JTextField();
+        painel.add(idadeField);
+
+        // Gênero
+        painel.add(new JLabel("Gênero:"));
+        String[] generos = {"Masculino", "Feminino", "Outro"};
+        generoBox = new JComboBox<>(generos);
+        painel.add(generoBox);
+
+        // Sintomas
+        painel.add(new JLabel("Sintomas:"));
+        sintomasArea = new JTextArea(5, 20);
+        sintomasArea.setLineWrap(true);
+        sintomasArea.setWrapStyleWord(true);
+        JScrollPane scroll = new JScrollPane(sintomasArea);
+        painel.add(scroll);
+
+        painel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        // Botões
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setBackground(new Color(230, 245, 250));
+        salvarButton = new JButton("Salvar");
+        limparButton = new JButton("Limpar");
+        sairButton = new JButton("Sair");
+
+        botoesPanel.add(salvarButton);
+        botoesPanel.add(limparButton);
+        botoesPanel.add(sairButton);
+
+        painel.add(botoesPanel);
+
+        // Ações dos botões
+        salvarButton.addActionListener(e -> salvarPaciente());
+        limparButton.addActionListener(e -> limparCampos());
+        sairButton.addActionListener(e -> System.exit(0));
+
+        add(painel);
+        setVisible(true);
+    }
+
+    private void salvarPaciente() {
+        String nome = nomeField.getText();
+        String idade = idadeField.getText();
+        String genero = (String) generoBox.getSelectedItem();
+        String sintomas = sintomasArea.getText();
+
+        if (nome.isEmpty() || idade.isEmpty() || sintomas.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Paciente salvo com sucesso:\n\nNome: " + nome + "\nIdade: " + idade +
+                            "\nGênero: " + genero + "\nSintomas: " + sintomas,
+                    "Cadastro Realizado", JOptionPane.INFORMATION_MESSAGE);
+            limparCampos();
+        }
+    }
+
+    private void limparCampos() {
+        nomeField.setText("");
+        idadeField.setText("");
+        generoBox.setSelectedIndex(0);
+        sintomasArea.setText("");
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(CadastroDePacientes::new);
+    }
+}
